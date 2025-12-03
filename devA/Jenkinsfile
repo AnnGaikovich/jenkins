@@ -18,13 +18,6 @@ pipeline {
     MAVEN_OPTS = '-Dmaven.test.failure.ignore=false'
   }
 
-  // Триггеры запуска конвейера
-  triggers {
-    // Периодически проверяет SCM (репозиторий) на изменения каждые ~2 минуты
-    pollSCM('H/2 * * * *')
-    // Для продакшена лучше настраивать webhooks, но локально pollSCM удобнее.
-  }
-
   stages {
 
     stage('Build') {
@@ -101,10 +94,10 @@ pipeline {
   // Глобальные действия после конвейера
   post {
     success {
-      echo "Build successful for ${env.BRANCH_NAME}"
+      echo "Build successful"
     }
     failure {
-      echo "Build failed for ${env.BRANCH_NAME}"
+      echo "Build failed"
     }
   }
 }
