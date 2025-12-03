@@ -25,28 +25,6 @@ pipeline {
     // Для продакшена лучше настраивать webhooks, но локально pollSCM удобнее.
   }
 
-  stages {
-//Вставка
-stage('Fix Git Ownership') {
-      steps {
-        bat 'git config --global --add safe.directory E:/repos/java-maven-ci-demo.git'
-      }
-    }
-//Вставка конец
-
-    stage('Checkout') {
-      steps {
-        // Извлечение кода из Git. Для локального демо используем file:// путь к bare-репозиторию.
-        // Замените путь на ваш локальный (Windows/Linux).
-        checkout([$class: 'GitSCM',
-          branches: [[name: '*/${BRANCH_NAME ?: "develop"}']],
-          userRemoteConfigs: [[url: 'file:///E:/repos/java-maven-ci-demo.git']]
-        ])
-        // Примечание: BRANCH_NAME Jenkins подставляет для мультиветочных пайплайнов.
-        // Для простого pipeline можно явно указать '*/main' или '*/develop'.
-      }
-    }
-
     stage('Build') {
       steps {
         // Проверка версии Maven
