@@ -25,6 +25,8 @@ pipeline {
     // Для продакшена лучше настраивать webhooks, но локально pollSCM удобнее.
   }
 
+  stages {
+
     stage('Build') {
       steps {
         // Проверка версии Maven
