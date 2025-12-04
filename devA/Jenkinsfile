@@ -34,37 +34,25 @@ pipeline {
     }
 
     stage('Test') {
-      steps {
-        // Запуск модульных тестов (JUnit 5) и сбор покрытия JaCoCo
-        bat 'mvn -B test'
-      }
-      post {
-        // Действия после стадии Test
-        always {
-          // Публикация результатов JUnit (Surefire создаёт XML-отчёты в target/surefire-reports)
-          junit '**/target/surefire-reports/*.xml'
+                steps {
+                    dir('devA') {
+                        bat 'mvn -B test'
+                    }
+                }
+                post {
+                    always {
+                        junit 'devA/target/surefire-reports/*.xml'
+                    }
+                }
+            }
 
-          // Публикация HTML-отчёта JaCoCo (генерируется в target/site/jacoco/index.html)
-          // Требуется плагин HTML Publibater в Jenkins.
-          publibatHTML([reportDir: 'target/site/jacoco',
-                       reportFiles: 'index.html',
-                       reportName: 'JaCoCo Coverage'])
-        }
-      }
-    }
-
-    stage('Package') {
-      steps {
-        // Сборка исполняемого JAR. Артефакт будет в target/java-maven-ci-demo-1.0.0.jar
-        bat 'mvn -B package'
-      }
-      post {
-        success {
-          // Архивирование собранных артефактов в Jenkins (видны в UI job)
-          archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-        }
-      }
-    }
+            stage('Package') {
+                steps {
+                    dir('devA') {
+                        bat 'mvn -B package'
+                    }
+                }
+            }
 
     stage('Quality gates') {
       // Стадия качества включается только для веток develop и main
