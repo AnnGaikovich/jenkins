@@ -22,8 +22,14 @@ pipeline {
 
     stage('Build') {
       steps {
-         bat 'dir /s pom.xml'
-                bat 'tree /F'  
+        // Проверка версии Maven
+        bat 'mvn -v'
+        // Компиляция проекта. Параметры:
+        // -B: batch mode (без интерактивных вопросов)
+        // -U: принудительно обновить снапшоты (на случай зависимостей)
+        dir('devA') {
+                    bat 'mvn -B -U clean compile'
+                }
       }
     }
 
