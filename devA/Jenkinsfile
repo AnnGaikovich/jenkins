@@ -27,7 +27,9 @@ pipeline {
         // Компиляция проекта. Параметры:
         // -B: batch mode (без интерактивных вопросов)
         // -U: принудительно обновить снапшоты (на случай зависимостей)
-        bat 'mvn -B -U clean compile'
+        dir('devA') {
+                    bat 'mvn -B -U clean compile'
+                }
       }
     }
 
